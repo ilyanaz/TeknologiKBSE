@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leadership & Team | Teknologi KBSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111827; /* bg-gray-900 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #f59e0b; /* bg-amber-500 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #d97706; /* bg-amber-600 */
+      }
+    </style>
+    <!-- Load React and ReactDOM from CDN -->
+    <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <!-- Load Babel for JSX transpilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body class="bg-gray-900">
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState, useEffect, useRef, useMemo } = React;
+
+      // === DATA ===
+      const teamData = [
+        {
+          department: "Board of Directors",
+          members: [
+            { name: "Nazri Muid", nickname: "Nazri", title: "Managing Director", imageUrl: "image/nazri.jpg", email: "nazri@kbse.com.my" },
+            { name: "Amran Bachok", nickname: "Amran", title: "Technical Director", imageUrl: "image/amran.jpg", email: "amran@kbse.com.my" }
+          ]
+        },
+        {
+          department: "HR & Finance Department",
+          members: [
+            { name: "Norlypastini Ismail", nickname: "Lily", title: "Head of HR & Finance", imageUrl: "image/lily.png", email: "lily@kbse.com.my" },
+            { name: "Jarilah Talib", nickname: "Jarilah", title: "Executive Accountant & HR", imageUrl: "image/jarilah.png", email: "jarilah@kbse.com.my" },
+            { name: "Puteri Nur Fariesha", nickname: "Puteri", title: "Assistant Admin & Account", imageUrl: "image/puteri.png", email: "puteri@kbse.com.my" },
+            { name: "Najwa Syuhada Pisol", nickname: "Najwa", title: "Assistant Admin & Account", imageUrl: "image/najwa.png", email: "najwa@kbse.com.my" }
+          ]
+        },
+        {
+          department: "IT Department",
+          members: [
+            { name: "Hairul Alhadi", nickname: "Hairul", title: "Head of IT", imageUrl: "image/hairul.png", email: "hairul@kbse.com.my" },
+            { name: "Rasdan Kamari", nickname: "Rasdan", title: "Technical Executive", imageUrl: "image/rasdan.png", email: "rasdan@kbse.com.my" },
+            { name: "Ihsan Ibrahim", nickname: "Ihsan", title: "Technical Executive", imageUrl: "image/ihsan.png", email: "ihsan@kbse.com.my" },
+            { name: "Dayana Hani", nickname: "Dayana", title: "Junior Software Engineer", imageUrl: "image/dayana.png", email: "dayana@kbse.com.my" },
+            { name: "Izzati Yusri", nickname: "Izzati", title: "Junior Software Engineer", imageUrl: "image/izzati.png", email: "izzati@kbse.com.my" }
+          ]
+        },
+        {
+          department: "GIS Department",
+          members: [
+            { name: "Nor Azura Husaini", nickname: "Azura", title: "Head of GIS", imageUrl: "image/azura.png", email: "azura@kbse.com.my" },
+            { name: "Madeehah Rasid", nickname: "Madee", title: "Senior GIS Engineer", imageUrl: "image/madee.png", email: "madeehah@kbse.com.my" }
+          ]
+        },
+        {
+          department: "Safety Department",
+          members: [
+            { name: "Nur Munirah Samad", nickname: "Munirah", title: "Executive Safety", imageUrl: "image/munirah.png", email: "munirah@kbse.com.my" }
+          ]
+        }
+      ];
+
+      // === SHARED & REUSABLE COMPONENTS ===
+
+      const ChevronDownIcon = () => (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      );
+
+      const NavLink = ({ href, children }) => (
+        <a href={href} className="text-gray-300 hover:text-amber-400 transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium">
+          {children}
+        </a>
+      );
+
+      const DropdownLink = ({ href, children }) => (
+        <a href={href} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-amber-400 w-full text-left transition-colors duration-300">
+          {children}
+        </a>
+      );
+
+      const Dropdown = ({ title, children }) => (
+          <div className="relative group">
+              <button className="text-gray-300 hover:text-amber-400 transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                  {title}
+                  <ChevronDownIcon />
+              </button>
+              <div className="absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2">
+                  <div className="py-1">
+                      {children}
+                  </div>
+              </div>
+          </div>
+      );
+
+      const Header = ({ isVisible }) => {
+        return (
+          <header
+            className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ease-in-out ${
+              isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+            }`}
+          >
+            <nav className="bg-black/70 backdrop-blur-md shadow-lg shadow-amber-500/10">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                  <div className="flex items-center">
+                    <a href="#" className="flex-shrink-0">
+                       <img
+                          src="image/logo kbse white.png"
+                          alt="Teknologi KBSE Logo"
+                          className="h-10 w-auto"
+                       />
+                    </a>
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="ml-10 flex items-baseline space-x-4">
+                      <NavLink href="index.html">Home</NavLink>
+                      <Dropdown title="About Us">
+                          <DropdownLink href="overview.html">Company Overview</DropdownLink>
+                          <DropdownLink href="team.html">Leadership & Team</DropdownLink>
+                          <DropdownLink href="cert-award.html">Certificates & Awards</DropdownLink>
+                      </Dropdown>
+                      <Dropdown title="Projects & Services">
+                          <DropdownLink href="product.html">Projects / Products</DropdownLink>
+                          <DropdownLink href="service.html">Services</DropdownLink>
+                      </Dropdown>
+                      <NavLink href="partner-client.html">Partners & Clients</NavLink>
+                      <NavLink href="galleryActivity.html">Activities & Gallery</NavLink>
+                      <NavLink href="contact.html">Contact Us</NavLink>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+        );
+      };
+
+      const FooterLink = ({ href, children }) => (
+          <a href={href} className="text-gray-400 hover:text-amber-400 transition-colors duration-300">
+              {children}
+          </a>
+      );
+
+      const Footer = () => {
+          return (
+              <footer className="bg-gray-900/80 backdrop-blur-sm text-gray-400 py-8">
+                  <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                          <div className="space-y-4">
+                            <img
+                              src="image/logo kbse white.png"
+                              alt="Teknologi KBSE Logo"
+                              className="h-12 w-auto"
+                            />
+                            <p className="text-sm">Teknologi KBSE Sdn Bhd (0759215-M)</p>
+                            <p className="text-sm">1-11-2 & 1-11-3, Presint Alami, Pusat Perdagangan Worldwide 2 Persiaran Akuatik, Seksyen 13, 40100 Shah Alam, Selangor, Malaysia.</p>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Quick Links</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="index.html">Home</FooterLink></li>
+                                  <li><FooterLink href="overview.html">About Us</FooterLink></li>
+                                  <li><FooterLink href="product.html">Projects & Services</FooterLink></li>
+                                  <li><FooterLink href="partner-client.html">Partners & Clients</FooterLink></li>
+                                  <li><FooterLink href="contact.html">Contact Us</FooterLink></li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Discover</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="cert-award.html">Certificates & Awards</FooterLink></li>
+                                  <li><FooterLink href="galleryActivity.html">Activities & Gallery</FooterLink></li>
+                                  <li><FooterLink href="overview.html">Company Overview</FooterLink></li>
+                                  <li><FooterLink href="team.html">Leadership</FooterLink></li>
+                                  <li><FooterLink href="faq.html">FAQ</FooterLink></li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Legal</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="privacyPolicy.html">Privacy Policy</FooterLink></li>
+                                  <li><FooterLink href="term-condition.html">Terms & Conditions</FooterLink></li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div className="mt-8 border-t border-gray-700 pt-8 text-center text-sm">
+                          <p>&copy; {new Date().getFullYear()} Teknologi KBSE Sdn. Bhd. All rights reserved.</p>
+                      </div>
+                  </div>
+              </footer>
+          );
+      };
+
+      const AnimatedSection = ({ children, className = '', animationDirection = 'up' }) => {
+        const [isVisible, setIsVisible] = useState(false);
+        const sectionRef = useRef(null);
+
+        useEffect(() => {
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) {
+                setIsVisible(true);
+                observer.unobserve(entry.target);
+              }
+            },
+            { root: null, rootMargin: '0px', threshold: 0.1 }
+          );
+          
+          const currentRef = sectionRef.current;
+          if (currentRef) observer.observe(currentRef);
+          return () => { if (currentRef) observer.unobserve(currentRef); };
+        }, []);
+
+        const getInitialTransformClass = (direction) => {
+          switch(direction) {
+            case 'left': return '-translate-x-20';
+            case 'right': return 'translate-x-20';
+            default: return 'translate-y-10';
+          }
+        };
+
+        return (
+          <div
+            ref={sectionRef}
+            className={`transition-all duration-1000 ease-out ${
+              isVisible ? 'opacity-100 translate-y-0 translate-x-0' : `opacity-0 ${getInitialTransformClass(animationDirection)}`
+            } ${className}`}
+          >
+            {children}
+          </div>
+        );
+      };
+
+
+      // === PAGE SPECIFIC COMPONENTS ===
+
+      const TeamMemberCard = ({ member }) => {
+        return (
+            <div className="w-48 group">
+                <div className="relative">
+                    <div className="p-0.5" style={{ clipPath: 'polygon(12% 0, 100% 0, 88% 100%, 0 100%)', background: 'linear-gradient(to right, #f97316, #dc2626)' }}>
+                        <div className="bg-gray-900" style={{ clipPath: 'polygon(12% 0, 100% 0, 88% 100%, 0 100%)' }}>
+                            <div className="aspect-[3/4] overflow-hidden">
+                                <img
+                                    className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                                    src={member.imageUrl}
+                                    alt={`Photo of ${member.name}`}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-[90%] -mt-8 z-10 relative left-1/2 -translate-x-1/2">
+                        <div className="px-2 py-1.5 text-center" style={{ clipPath: 'polygon(8% 0, 100% 0, 92% 100%, 0 100%)', background: 'linear-gradient(to right, #f97316, #dc2626)' }}>
+                            <h3 className="text-white text-xs font-bold uppercase tracking-wide truncate">{member.name}</h3>
+                            <p className="text-amber-200 text-[10px] uppercase">{member.title}</p>
+                            <a href={`mailto:${member.email}`} className="text-amber-300 text-[9px] lowercase truncate block hover:text-white transition-colors duration-200">{member.email}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+      };
+
+      const renderDepartmentMembers = (dept) => {
+          const TeamGrid = ({ members }) => (
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
+              {members.map((member) => (
+                <TeamMemberCard key={member.name} member={member} />
+              ))}
+            </div>
+          );
+
+          if (dept.department === "HR & Finance Department") {
+              const head = dept.members.find(m => m.title.includes("Head"));
+              const staff = dept.members.filter(m => !m.title.includes("Head"));
+              return (
+                  <div className="space-y-8 text-center">
+                      {head && <div className="flex justify-center"><TeamMemberCard member={head} /></div>}
+                      {staff.length > 0 && <TeamGrid members={staff} />}
+                  </div>
+              );
+          }
+
+          if (dept.department === "IT Department") {
+              const head = dept.members.find(m => m.title.includes("Head"));
+              const executives = dept.members.filter(m => m.title.includes("Executive"));
+              const engineers = dept.members.filter(m => m.title.includes("Engineer"));
+              return (
+                  <div className="space-y-8 text-center">
+                      {head && <div className="flex justify-center"><TeamMemberCard member={head} /></div>}
+                      {executives.length > 0 && <div className="mt-8"><TeamGrid members={executives} /></div>}
+                      {engineers.length > 0 && <div className="mt-8"><TeamGrid members={engineers} /></div>}
+                  </div>
+              );
+          }
+
+          return <TeamGrid members={dept.members} />;
+      };
+
+
+      // === MAIN APP COMPONENT ===
+      const App = () => {
+        const [selectedDept, setSelectedDept] = useState(teamData[0].department);
+        const currentDepartmentData = useMemo(() => teamData.find(d => d.department === selectedDept), [selectedDept]);
+
+        return (
+          <div className="bg-gray-900 text-white min-h-screen overflow-x-hidden">
+            <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  src="video/bghp.mp4"
+                  className="absolute w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gray-900/80"></div>
+            </div>
+
+            <div className="relative z-10 flex flex-col min-h-screen">
+              <Header isVisible={true} />
+              <main className="flex-grow pt-16">
+                  <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+                    
+                    <AnimatedSection>
+                      <div className="text-center mb-8">
+                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">Our Leadership & Team</span>
+                        </h1>
+                        <p className="mt-3 text-lg text-gray-300 max-w-2xl mx-auto">
+                          Meet the dedicated professionals driving our success and innovation.
+                        </p>
+                      </div>
+                    </AnimatedSection>
+                    
+                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+                      <aside className="w-full md:w-1/4 lg:w-1/5">
+                        <AnimatedSection animationDirection="left">
+                          <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-lg sticky top-20">
+                            <h2 className="text-lg font-semibold text-amber-400 mb-4 border-b border-amber-500/30 pb-2">Departments</h2>
+                            <ul className="space-y-2">
+                              {teamData.map(dept => (
+                                <li key={dept.department}>
+                                  <button
+                                    onClick={() => setSelectedDept(dept.department)}
+                                    className={`w-full text-left px-3 py-2 text-sm rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 ${
+                                      selectedDept === dept.department
+                                        ? 'bg-amber-500 text-gray-900 font-bold shadow-lg'
+                                        : 'text-gray-300 hover:bg-gray-700/50 hover:text-amber-300'
+                                    }`}
+                                  >
+                                    {dept.department}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </AnimatedSection>
+                      </aside>
+
+                      <section className="w-full md:w-3/4 lg:w-4/5">
+                        <AnimatedSection key={selectedDept} animationDirection="right">
+                          {currentDepartmentData && (
+                            <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-lg">
+                              <h2 className="text-3xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+                                {currentDepartmentData.department}
+                              </h2>
+                              {renderDepartmentMembers(currentDepartmentData)}
+                            </div>
+                          )}
+                        </AnimatedSection>
+                      </section>
+                    </div>
+
+                  </div>
+              </main>
+              <Footer />
+            </div>
+          </div>
+        );
+      };
+
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Could not find root element to mount to");
+      }
+
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>

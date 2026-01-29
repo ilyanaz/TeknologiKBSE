@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects &amp; Products | Teknologi KBSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111827; /* bg-gray-900 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #f59e0b; /* bg-amber-500 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #d97706; /* bg-amber-600 */
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client"
+  }
+}
+</script>
+</head>
+  <body class="bg-gray-900">
+    <div id="root"></div>
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect, useRef } from 'react';
+      import ReactDOM from 'react-dom/client';
+
+      // === Reusable Components ===
+
+      const ChevronDownIcon = () => (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      );
+
+      const NavLink = ({ href, children }) => (
+        <a href={href} className="text-gray-300 hover:text-amber-400 transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium">
+          {children}
+        </a>
+      );
+
+      const DropdownLink = ({ href, children }) => (
+        <a href={href} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-amber-400 w-full text-left transition-colors duration-300">
+          {children}
+        </a>
+      );
+
+      const Dropdown = ({ title, children }) => (
+          <div className="relative group">
+              <button className="text-gray-300 hover:text-amber-400 transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                  {title}
+                  <ChevronDownIcon />
+              </button>
+              <div className="absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2">
+                  <div className="py-1">
+                      {children}
+                  </div>
+              </div>
+          </div>
+      );
+
+      const Header = ({ isVisible }) => {
+        return (
+          <header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+              isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+            }`}
+          >
+            <nav className="bg-black/70 backdrop-blur-md shadow-lg shadow-amber-500/10">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                  <div className="flex items-center">
+                    <a href="index.html" className="flex-shrink-0">
+                      <img 
+                        src="image/logo kbse white.png"
+                        alt="Teknologi KBSE Logo"
+                        className="h-10 w-auto"
+                      />
+                    </a>
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="ml-10 flex items-baseline space-x-4">
+                      <NavLink href="index.html">Home</NavLink>
+                      <Dropdown title="About Us">
+                          <DropdownLink href="overview.html">Company Overview</DropdownLink>
+                          <DropdownLink href="team.html">Leadership & Team</DropdownLink>
+                          <DropdownLink href="cert-award.html">Certificates & Awards</DropdownLink>
+                      </Dropdown>
+                      <Dropdown title="Projects & Services">
+                          <DropdownLink href="product.html">Projects / Products</DropdownLink>
+                          <DropdownLink href="service.html">Services</DropdownLink>
+                      </Dropdown>
+                      <NavLink href="partner-client.html">Partners & Clients</NavLink>
+                      <NavLink href="galleryActivity.html">Activities & Gallery</NavLink>
+                      <NavLink href="contact.html">Contact Us</NavLink>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+        );
+      };
+      
+      const FooterLink = ({ href, children }) => (
+          <a href={href} className="text-gray-400 hover:text-amber-400 transition-colors duration-300">
+              {children}
+          </a>
+      );
+
+      const Footer = () => {
+          return (
+              <footer className="bg-gray-900 text-gray-400 py-12 relative z-20">
+                  <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                          <div className="space-y-4">
+                            <img 
+                                src="image/logo kbse white.png"
+                                alt="Teknologi KBSE Logo"
+                                className="h-12 w-auto"
+                            />                         
+                            <p className="text-sm">Teknologi KBSE Sdn Bhd (0759215-M)</p>
+                            <p className="text-sm">1-11-2 & 1-11-3, Presint Alami, Pusat Perdagangan Worldwide 2 Persiaran Akuatik, Seksyen 13, 40100 Shah Alam, Selangor, Malaysia.</p>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Quick Links</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="index.html">Home</FooterLink></li>
+                                  <li><FooterLink href="overview.html">About Us</FooterLink></li>
+                                  <li><FooterLink href="product.html">Projects & Services</FooterLink></li>
+                                  <li><FooterLink href="partner-client.html">Partners & Clients</FooterLink></li>
+                                  <li><FooterLink href="contact.html">Contact Us</FooterLink></li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Discover</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="cert-award.html">Certificates & Awards</FooterLink></li>
+                                  <li><FooterLink href="galleryActivity.html">Activities & Gallery</FooterLink></li>
+                                  <li><FooterLink href="overview.html">Company Overview</FooterLink></li>
+                                  <li><FooterLink href="team.html">Leadership</FooterLink></li>
+                                  <li><FooterLink href="faq.html">FAQ</FooterLink></li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Legal</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="privacyPolicy.html">Privacy Policy</FooterLink></li>
+                                  <li><FooterLink href="term-condition.html">Terms & Conditions</FooterLink></li>
+                              </ul>
+                          </div>
+                      </div>
+
+                      <div className="mt-12 border-t border-gray-700 pt-8 text-center text-sm">
+                          <p>&copy; {new Date().getFullYear()} Teknologi KBSE Sdn. Bhd. All rights reserved.</p>
+                      </div>
+                  </div>
+              </footer>
+          );
+      };
+
+      const AnimatedSection = ({ children, className = '', delay = 0 }) => {
+        const [isVisible, setIsVisible] = useState(false);
+        const sectionRef = useRef(null);
+
+        useEffect(() => {
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) {
+                setIsVisible(true);
+                observer.unobserve(entry.target);
+              }
+            },
+            { root: null, rootMargin: '0px', threshold: 0.1 }
+          );
+          
+          const currentRef = sectionRef.current;
+          if (currentRef) observer.observe(currentRef);
+          return () => { if (currentRef) observer.unobserve(currentRef); };
+        }, []);
+
+        return (
+          <div
+            ref={sectionRef}
+            className={`transition-all duration-1000 ease-out ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            } ${className}`}
+            style={{ transitionDelay: `${delay}ms` }}
+          >
+            {children}
+          </div>
+        );
+      };
+
+      const SectionTitle = ({ children, className = '' }) => (
+          <h2 className={`text-3xl font-bold mb-12 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 ${className}`}>
+              {children}
+          </h2>
+      );
+
+      const SocialLink = ({ href, iconClass }) => (
+        <a href={href} target="_blank" rel="noopener noreferrer" className="text-white hover:text-amber-400 transition-transform duration-300 hover:scale-110">
+            <i className={`${iconClass} fa-2x`}></i>
+        </a>
+      );
+      
+      const sliderProjectsData = [
+        { title: 'Masheeta Beauty', year: '2025', logoUrl: 'https://masheeta.my/cdn/shop/files/Untitled-1-01_250x@2x.png?v=1698994027', description: 'Development of an innovative e-commerce and digital marketing platform for Masheeta Beauty, enhancing customer engagement and streamlining online beauty product sales.', link: 'https://masheeta.my/' },
+        { title: 'STORMWATER', year: '2023–2024', logoUrl: 'image/logo-stormwater.png', description: 'An integrated platform for collecting drainage information to manage flood risks, maintain water quality, and efficiently track drainage asset inventories.', link: 'https://storm.water.gov.my' },
+        { title: 'Sewaan Peralatan ICT PRU Ke-15', year: '2022–2023', logoUrl: 'https://mysprsemak.spr.gov.my/img/Semakan/spr.png', description: 'Provision of ICT hardware and software for election roll verification clerks during Malaysia’s 15th General Election, ensuring accurate and efficient voter verification processes.', link: null },
+        { title: 'Safety and Health Management System (SHAMS)', year: '2022', logoUrl: 'https://shams.com.my/assets/images/logo/logo.png?v=1', description: 'A centralized platform for managing workplace safety and health requirements, allowing organizations to track incidents, compliance, audits, and employee health records seamlessly.', link: 'https://l.instagram.com/?u=https%3A%2F%2Flinktr.ee%2Fshams.osh%3Ffbclid%3DPAZXh0bgNhZW0CMTEAAad2bMRcz85pWwsH5kUZbAmrZt3wTRPadDPvm5LhUos1Cm20bvK1iNXZp1X0bw_aem_r8CfLf96COVJnlWSovyGoQ&e=AT3MDt1l0j8DrCu_qjE_Ev4w5-ZB_akt81tbEWXKkE18WhQuWQ8tweEkg_4BGuWhA0SYOjC3eAVJAWpY-0x7u5POhdtX8rI8HxSK9yTmHw' },
+        { title: 'SMPG Labuan & Sistem eKesihatan', year: '2021–2023', logoUrl: 'https://smpgl.pl.gov.my/assets/polo/images/logo-labuan.png', description: 'Enhancement of Labuan’s land use planning system and development of an e-health platform, empowering Perbadanan Labuan to streamline operations for spatial planning and public health.', link: 'https://smpgl.pl.gov.my/' },
+        { title: 'Sistem eCommerce Meem Gold', year: '2021', logoUrl: 'https://meem.com.my/assets/wolmart/images/logo.png?v=29072025', description: 'Development of a secure, user-friendly e-commerce platform for Meem Gold, offering a seamless online gold trading and investment experience.', link: 'https://l.instagram.com/?u=https%3A%2F%2Flinktr.ee%2Fmeemgoldofficial%3Ffbclid%3DPAZXh0bgNhZW0CMTEAAaf9NW6lfGkRZEM3MUFphVHO9vj57BUMpOasBmihuuHn07bfNZdsEjyGRI3XsQ_aem_Piyp0vVGxeCAHfRXXQWGjA&e=AT0gmczc4Fjdzpi88HuNBHoU0Ack4F5CxLyjuvs45b6g9mbyOzzb2dGwh1QrFrnZvHPVO3Tc67Cbb1T-ONVq-cZN6mcsy4Hm-HIYELr6DA' },
+        { title: 'Sistem Permohonan Data Geospatial JPS (SPDG)', year: '2016–2017', logoUrl: 'https://data.water.gov.my/images/logojps.png', description: 'An online system for the Department of Irrigation and Drainage (JPS) to manage geospatial data requests from government and private sectors, supporting data-driven decision-making.', link: 'http://spdg.water.gov.my/site/index' },
+        { title: 'eRayuan Pulau Pinang', year: '2013–2024', logoUrl: 'https://erayuan.penang.gov.my/assets/themes/advice/images/resources/logo-erayuan.png', description: 'A digital appeals system for the Penang Appeals Board, streamlining the application, management, and resolution of town and country planning appeals.', link: 'https://erayuan.penang.gov.my/' }
+      ];
+
+      const ProductSliderCard = ({ project }) => (
+        <div className="w-80 md:w-96 flex-shrink-0 text-center bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">
+            <div className="relative group h-56 flex items-center justify-center bg-white p-4">
+                <img src={project.logoUrl} alt={project.title} className="max-h-32 w-auto object-contain" />
+                <div className="absolute inset-0 bg-sky-900 bg-opacity-95 flex items-center justify-center p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
+                    <div className="text-center">
+                        <p className="text-sm mb-4 text-gray-200">{project.description}</p>
+                        {project.link && (
+                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-block bg-amber-500 text-black px-5 py-2 rounded-md text-sm font-semibold hover:bg-amber-600 transition-colors">
+                                Learn More
+                            </a>
+                        )}
+                    </div>
+                </div>
+            </div>
+            <div className="p-6">
+                <h3 className="text-lg font-bold text-white">{project.title}</h3>
+                <p className="mt-2 text-base text-gray-400">{project.year}</p>
+            </div>
+        </div>
+      );
+
+
+      // === Main Page Component ===
+      const ProductPage = () => {
+        const sliderRef = useRef(null);
+        const [canScrollLeft, setCanScrollLeft] = useState(false);
+        const [canScrollRight, setCanScrollRight] = useState(true);
+        const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+
+        const highlightedProjects = [
+            {
+                title: "SHAMS",
+                video: "video/SHAMS short.mp4",
+                links: [
+                    { href: "https://shams.com.my/", icon: "fas fa-globe" },
+                    { href: "https://www.facebook.com/profile.php?id=61560999557114", icon: "fab fa-facebook" },
+                    { href: "https://www.instagram.com/shams.osh", icon: "fab fa-instagram" },
+                    { href: "https://www.tiktok.com/@shams.kbse", icon: "fab fa-tiktok" },
+                    { href: "https://api.whatsapp.com/send?phone=601121156033", icon: "fab fa-whatsapp" }
+                ]
+            },
+            {
+                title: "MEEM Gold",
+                video: "video/MEEMGold short videos.mp4",
+                links: [
+                    { href: "https://meem.com.my/", icon: "fas fa-globe" },
+                    { href: "https://www.youtube.com/@meemgoldhq", icon: "fab fa-youtube" },
+                    { href: "https://www.facebook.com/meemgoldhq/", icon: "fab fa-facebook" },
+                    { href: "https://www.instagram.com/meemgoldhq", icon: "fab fa-instagram" },
+                    { href: "https://www.tiktok.com/@meemgoldhq", icon: "fab fa-tiktok" },
+                    { href: "https://api.whatsapp.com/send?phone=60355231231", icon: "fab fa-whatsapp" }
+                ]
+            },
+            {
+                title: "Masheeta Beauty",
+                video: "video/Masheeta.mp4",
+                links: [
+                    { href: "https://masheeta.my/", icon: "fas fa-globe" },
+                    { href: "https://www.facebook.com/masheetabeautee.hq", icon: "fab fa-facebook" },
+                    { href: "https://www.instagram.com/masheetabeautee", icon: "fab fa-instagram" },
+                    { href: "https://www.tiktok.com/@masheetabeautee?", icon: "fab fa-tiktok" },
+                    { href: "http://www.youtube.com/@masheetabeautee5808", icon: "fab fa-youtube" }
+                  ]
+            }
+        ];
+
+        const checkScrollButtons = () => {
+            const slider = sliderRef.current;
+            if (slider) {
+                const { scrollLeft, scrollWidth, clientWidth } = slider;
+                setCanScrollLeft(scrollLeft > 0);
+                setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+            }
+        };
+
+        useEffect(() => {
+            const slider = sliderRef.current;
+            if (slider) {
+                checkScrollButtons();
+                slider.addEventListener('scroll', checkScrollButtons, { passive: true });
+                window.addEventListener('resize', checkScrollButtons);
+            }
+            return () => {
+                if (slider) {
+                    slider.removeEventListener('scroll', checkScrollButtons);
+                    window.removeEventListener('resize', checkScrollButtons);
+                }
+            };
+        }, []);
+
+        const handleScroll = (direction) => {
+            if (sliderRef.current) {
+                const scrollAmount = sliderRef.current.clientWidth * 0.8;
+                sliderRef.current.scrollBy({ 
+                    left: direction === 'left' ? -scrollAmount : scrollAmount, 
+                    behavior: 'smooth' 
+                });
+            }
+        };
+
+        const nextVideo = () => {
+            setActiveVideoIndex((prev) => (prev + 1) % highlightedProjects.length);
+        };
+
+        const prevVideo = () => {
+            setActiveVideoIndex((prev) => (prev - 1 + highlightedProjects.length) % highlightedProjects.length);
+        };
+
+        return (
+          <div className="bg-gray-900 text-white min-h-screen">
+            <Header isVisible={true} />
+            <main>
+              {/* Sliding Video Showcase Section (Starts Immediately After Header) */}
+              <section id="projects" className="relative h-screen bg-black overflow-hidden group">
+                  {highlightedProjects.map((project, index) => (
+                    <div 
+                        key={index} 
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === activeVideoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                    >
+                        <div className="absolute inset-0 z-0">
+                            <video 
+                                src={project.video} 
+                                className="w-full h-full object-cover" 
+                                autoPlay 
+                                muted 
+                                loop 
+                                playsInline
+                            ></video>
+                            <div className="absolute inset-0 bg-black/40"></div>
+                        </div>
+                        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+                            <AnimatedSection>
+                                <h2 className="text-5xl md:text-8xl font-extrabold tracking-tight uppercase" style={{textShadow: '0 4px 10px rgba(0,0,0,0.8)'}}>
+                                    {project.title}
+                                </h2>
+                                <div className="mt-8 flex justify-center flex-wrap gap-6">
+                                    {project.links && project.links.map((link, lIndex) => (
+                                        <SocialLink key={lIndex} href={link.href} iconClass={link.icon} />
+                                    ))}
+                                </div>
+                            </AnimatedSection>
+                        </div>
+                    </div>
+                  ))}
+
+                  {/* Slider Controls */}
+                  <button 
+                    onClick={prevVideo}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-4 rounded-full bg-white/10 hover:bg-amber-500/80 transition-all duration-300 opacity-0 group-hover:opacity-100"
+                  >
+                    <i className="fas fa-chevron-left text-2xl"></i>
+                  </button>
+                  <button 
+                    onClick={nextVideo}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-4 rounded-full bg-white/10 hover:bg-amber-500/80 transition-all duration-300 opacity-0 group-hover:opacity-100"
+                  >
+                    <i className="fas fa-chevron-right text-2xl"></i>
+                  </button>
+
+                  {/* Slider Indicators */}
+                  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex space-x-3">
+                    {highlightedProjects.map((_, index) => (
+                        <button 
+                            key={index}
+                            onClick={() => setActiveVideoIndex(index)}
+                            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === activeVideoIndex ? 'bg-amber-500 w-8' : 'bg-white/50'}`}
+                        ></button>
+                    ))}
+                  </div>
+              </section>
+
+              {/* Other Projects Section */}
+                <section className="relative z-20 bg-gray-900 py-20">
+                    <div className="container mx-auto px-6">
+                        <AnimatedSection>
+                            <div className="text-center">
+                                <SectionTitle>Overall Projects / Products</SectionTitle>
+                                <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto -mt-10 mb-16">
+                                    Beyond our flagship products, we've developed a wide range of solutions for various industries.
+                                </p>
+                            </div>
+                        </AnimatedSection>
+                        <div className="relative mt-12">
+                            <button
+                                id="scroll-left"
+                                onClick={() => handleScroll('left')}
+                                className={`absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-4 z-30 bg-gray-800/80 hover:bg-gray-700 rounded-full p-2 shadow-md cursor-pointer hidden md:flex items-center justify-center transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+
+                            <div ref={sliderRef} id="product-slider" className="flex overflow-x-auto scroll-smooth scrollbar-hide space-x-8 py-4">
+                                {sliderProjectsData.map((project, index) => (
+                                    <ProductSliderCard key={index} project={project} />
+                                ))}
+                            </div>
+
+                            <button
+                                id="scroll-right"
+                                onClick={() => handleScroll('right')}
+                                className={`absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-4 z-30 bg-gray-800/80 hover:bg-gray-700 rounded-full p-2 shadow-md cursor-pointer hidden md:flex items-center justify-center transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Custom Software Solutions Section */}
+                <section className="relative z-20 bg-gray-900 py-20">
+                    <div className="container mx-auto px-6 text-center">
+                        <AnimatedSection>
+                            <SectionTitle>Robust Custom Software Solutions</SectionTitle>
+                            <div className="max-w-4xl mx-auto space-y-6 text-lg text-gray-300 text-left md:text-center">
+                                <p>
+                                    Teknologi KBSE is a leading software development company based in Malaysia, specializing in delivering robust custom software solutions for businesses. Take advantage of our innovative and adaptable custom software services to achieve your business goals. We create custom software solutions that are tailored to meet business needs, enabling organizations to take advantage of digital transformation and innovation.
+                                </p>
+                                <p>
+                                    If you are seeking to develop a SaaS product, streamline business processes, or integrate systems, your specific business needs call for a thoughtful approach and expertise. Our team of local software developers in Malaysia specializes in creating scalable software solutions that are customized to align with your evolving business needs over time.
+                                </p>
+                            </div>
+                        </AnimatedSection>
+                    </div>
+                </section>
+
+                {/* Call to Action Section */}
+                <section className="relative z-20 bg-gray-900 to-black py-20">
+                    <div className="container mx-auto px-6 text-center">
+                    <AnimatedSection>
+                    <div className="bg-gray-900/50 border border-amber-500/30 rounded-lg p-10 text-center shadow-lg">
+                      <SectionTitle>Ready to Transform Your Business?</SectionTitle>
+                      <p className="text-gray-300 max-w-3xl mx-auto mb-8">
+                        Explore our services and projects or get in touch to discuss how we can help transform your business.
+                      </p>
+                      <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="service.html" className="bg-amber-500 text-black font-bold py-3 px-6 rounded-lg hover:bg-amber-600 transition-colors duration-300">
+                          Explore Services
+                        </a>
+                        <a href="contact.html" className="bg-transparent border-2 border-white text-white font-bold py-3 px-6 rounded-lg hover:bg-white hover:text-black transition-colors duration-300">
+                          Contact Us
+                        </a>
+                      </div>
+                    </div>
+                  </AnimatedSection>                    
+                  </div>
+                </section>
+
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      // === Render the App ===
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Could not find root element to mount to");
+      }
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <ProductPage />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>

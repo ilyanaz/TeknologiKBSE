@@ -1,0 +1,488 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partners & Clients | Teknologi KBSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111827; /* bg-gray-900 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #f59e0b; /* bg-amber-500 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #d97706; /* bg-amber-600 */
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+</head>
+  <body class="bg-gray-900">
+    <div id="root"></div>
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect, useRef } from 'react';
+      import ReactDOM from 'react-dom/client';
+
+      // === Reusable Components (for consistency) ===
+
+      const ChevronDownIcon = () => (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      );
+
+      const NavLink = ({ href, children }) => (
+        <a href={href} className="text-gray-300 hover:text-amber-400 transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium">
+          {children}
+        </a>
+      );
+
+      const DropdownLink = ({ href, children }) => (
+        <a href={href} className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-amber-400 w-full text-left transition-colors duration-300">
+          {children}
+        </a>
+      );
+
+      const Dropdown = ({ title, children }) => (
+          <div className="relative group">
+              <button className="text-gray-300 hover:text-amber-400 transition-colors duration-300 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                  {title}
+                  <ChevronDownIcon />
+              </button>
+              <div className="absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2">
+                  <div className="py-1">
+                      {children}
+                  </div>
+              </div>
+          </div>
+      );
+
+      const Header = ({ isVisible }) => {
+        return (
+          <header
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+              isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+            }`}
+          >
+            <nav className="bg-black/70 backdrop-blur-md shadow-lg shadow-amber-500/10">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-16">
+                  <div className="flex items-center">
+                    <a href="index.html" className="flex-shrink-0">
+                      <img 
+                        src="image/logo kbse white.png"
+                        alt="Teknologi KBSE Logo"
+                        className="h-10 w-auto"
+                      />
+                    </a>
+                  </div>
+                  <div className="hidden md:block">
+                    <div className="ml-10 flex items-baseline space-x-4">
+                      <NavLink href="index.html">Home</NavLink>
+                      <Dropdown title="About Us">
+                          <DropdownLink href="overview.html">Company Overview</DropdownLink>
+                          <DropdownLink href="team.html">Leadership & Team</DropdownLink>
+                          <DropdownLink href="cert-award.html">Certificates & Awards</DropdownLink>
+                      </Dropdown>
+                      <Dropdown title="Projects & Services">
+                          <DropdownLink href="product.html">Projects / Products</DropdownLink>
+                          <DropdownLink href="service.html">Services</DropdownLink>
+                      </Dropdown>
+                      <NavLink href="partner-client.html">Partners & Clients</NavLink>
+                      <NavLink href="galleryActivity.html">Activities & Gallery</NavLink>
+                      <NavLink href="contact.html">Contact Us</NavLink>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </header>
+        );
+      };
+      
+      const FooterLink = ({ href, children }) => (
+          <a href={href} className="text-gray-400 hover:text-amber-400 transition-colors duration-300">
+              {children}
+          </a>
+      );
+
+      const Footer = () => {
+          return (
+              <footer className="bg-gray-900 text-gray-400 py-12">
+                  <div className="max-w-7xl mx-auto px-6 lg:px-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                          <div className="space-y-4">
+                            <img 
+                                src="image/logo kbse white.png"
+                                alt="Teknologi KBSE Logo"
+                                className="h-12 w-auto"
+                            />                         
+                            <p className="text-sm">Teknologi KBSE Sdn Bhd (0759215-M)</p>
+                            <p className="text-sm">1-11-2 & 1-11-3, Presint Alami, Pusat Perdagangan Worldwide 2 Persiaran Akuatik, Seksyen 13, 40100 Shah Alam, Selangor, Malaysia.</p>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Quick Links</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="index.html">Home</FooterLink></li>
+                                  <li><FooterLink href="overview.html">About Us</FooterLink></li>
+                                  <li><FooterLink href="product.html">Projects & Services</FooterLink></li>
+                                  <li><FooterLink href="partner-client.html">Partners & Clients</FooterLink></li>
+                                  <li><FooterLink href="contact.html">Contact Us</FooterLink></li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Discover</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="cert-award.html">Certificates & Awards</FooterLink></li>
+                                  <li><FooterLink href="galleryActivity.html">Activities & Gallery</FooterLink></li>
+                                  <li><FooterLink href="overview.html">Company Overview</FooterLink></li>
+                                  <li><FooterLink href="team.html">Leadership</FooterLink></li>
+                                  <li><FooterLink href="faq.html">FAQ</FooterLink></li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 className="text-sm font-semibold text-white tracking-wider uppercase">Legal</h3>
+                              <ul className="mt-4 space-y-2">
+                                  <li><FooterLink href="privacyPolicy.html">Privacy Policy</FooterLink></li>
+                                  <li><FooterLink href="term-condition.html">Terms & Conditions</FooterLink></li>
+                              </ul>
+                          </div>
+                      </div>
+
+                      <div className="mt-12 border-t border-gray-700 pt-8 text-center text-sm">
+                          <p>&copy; {new Date().getFullYear()} Teknologi KBSE Sdn. Bhd. All rights reserved.</p>
+                      </div>
+                  </div>
+              </footer>
+          );
+      };
+
+      const AnimatedSection = ({ children, className = '', delay = 0 }) => {
+        const [isVisible, setIsVisible] = useState(false);
+        const sectionRef = useRef(null);
+
+        useEffect(() => {
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (entry.isIntersecting) {
+                setIsVisible(true);
+                observer.unobserve(entry.target);
+              }
+            },
+            { root: null, rootMargin: '0px', threshold: 0.1 }
+          );
+          
+          const currentRef = sectionRef.current;
+          if (currentRef) observer.observe(currentRef);
+          return () => { if (currentRef) observer.unobserve(currentRef); };
+        }, []);
+
+        return (
+          <div
+            ref={sectionRef}
+            className={`transition-all duration-1000 ease-out ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            } ${className}`}
+            style={{ transitionDelay: `${delay}ms` }}
+          >
+            {children}
+          </div>
+        );
+      };
+
+      const SectionTitle = ({ children, className = '' }) => (
+          <h2 className={`text-3xl font-bold mb-4 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 ${className}`}>
+              {children}
+          </h2>
+      );
+      
+      const Parallax = ({ children, className = '', speed = 0.1, axis = 'y' }) => {
+          const elRef = useRef(null);
+
+          useEffect(() => {
+              let isTicking = false;
+              const handleScroll = () => {
+                  if (!elRef.current) return;
+                  const rect = elRef.current.getBoundingClientRect();
+                  const windowHeight = window.innerHeight;
+                  if (rect.bottom < 0 || rect.top > windowHeight) return;
+                  const elementCenter = rect.top + rect.height / 2;
+                  const viewportCenter = windowHeight / 2;
+                  const progress = (elementCenter - viewportCenter) / viewportCenter;
+                  const offset = -progress * speed * 100;
+                  elRef.current.style.transform = `translate${axis.toUpperCase()}(${offset}px) translateZ(0)`;
+              };
+              const onScroll = () => {
+                  if (!isTicking) {
+                      window.requestAnimationFrame(() => {
+                          handleScroll();
+                          isTicking = false;
+                      });
+                      isTicking = true;
+                  }
+              };
+              window.addEventListener('scroll', onScroll, { passive: true });
+              handleScroll();
+              return () => window.removeEventListener('scroll', onScroll);
+          }, [speed, axis]);
+
+          return <div ref={elRef} className={className}>{children}</div>;
+      };
+
+
+      // === Data for Partners & Clients Page ===
+      const partnersData = {
+        technology: [
+          { name: 'CELUM', logoUrl: 'https://www.celum.com/en/wp-content/uploads/sites/2/2021/01/celum-header-logo.svg' },
+          { name: 'MobileERP', logoUrl: null },
+          { name: 'RS & GIS', logoUrl: 'https://www.resgis.com.my/wp-content/uploads/2021/04/RSGIS-New-LogoAsset-3.png' },
+          { name: 'Universiti Teknologi Malaysia', logoUrl: 'https://www.utm.my/wp-content/uploads/2022/10/LOGO-UTM.png' },
+          { name: 'shinjiru Malaysia', logoUrl: 'https://www.shinjiru.com/wp-content/themes/sjcom_child/assets/img/logo.png' },
+          { name: 'OffSquare', logoUrl: 'https://biz.puchong.co/wp-content/uploads/2025/10/offsquare.webp' }
+        ],
+        strategic: [
+          { name: 'DELL', logoUrl: 'https://tbcdn.talentbrew.com/company/375/gst_v1_0/img/logos/dell-logo.svg' },
+          { name: 'BOSCH', logoUrl: 'https://media.bosch-pt.com.my/media/professional/central_assets/bosch_logo/bosch.svg' },
+          { name: 'hp', logoUrl: 'https://my-media.apjonlinecdn.com/logo/stores/1/HP_New_logo_1.svg' },
+          { name: 'IBM', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/500px-IBM_logo.svg.png' },
+          { name: 'esri', logoUrl: 'https://esrimalaysia.com.my/sites/esrimalaysia.com.my/themes/custom/esrimy/Esri_Malaysia_Logo.png' },
+          { name: 'vCloudPoint', logoUrl: 'https://www.vcloudpoint.com/wp-content/uploads/2014/12/logo-500x80.png' }
+        ],
+        security: [
+          { name: 'symantec', logoUrl: 'https://cdn.freebiesupply.com/logos/large/2x/symantec-logo-png-transparent.png' },
+          { name: 'Trend Micro', logoUrl: 'data:image/png;base64,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' },
+          { name: 'AVG', logoUrl: 'https://seeklogo.com/images/A/avg-logo-C0873E4E9D-seeklogo.com.png' },
+          { name: 'KASPERSKY', logoUrl: 'https://logoeps.com/wp-content/uploads/2013/03/kaspersky-anti-virus-vector-logo.png' },
+          { name: 'Penta Security', logoUrl: 'https://www.cloudbric.com/wp-content/uploads/2025/01/ci_type1_basic.png' }
+        ]
+      };
+
+      const clientsData = {
+        government: [
+          { name: 'Kementerian Kerja Raya (KKR)', logoUrl: 'https://www.kkr.gov.my/sites/default/files/icon/Logo%20Jata%20Negara.png' },
+          { name: 'Kementerian Belia dan Sukan (KBS)', logoUrl: 'https://masarchery.org/wp-content/uploads/2015/06/logo-sukan-png-2.png' },
+          { name: 'Kementerian Kesihatan Malaysia (MOH)', logoUrl: 'https://ecentral.my/wp-content/uploads/2023/05/logo-kkm.png' },
+          { name: 'Agensi Nuklear Malaysia (MINT)', logoUrl: 'https://www.nuclearmalaysia.gov.my/images/logoLink/logo.png' },
+          { name: 'Kementerian Kesejahteraan Bandar Perumahan dan Kerajaan Tempatan (KPKT)', logoUrl: 'https://vectorise.net/logo/wp-content/uploads/2013/06/Logo-Kementerian-Kesejahteraan-Bandar-Perumahan-Kerajaan-Tempatan.jpg' },
+          { name: 'George Town World Heritage Incorporate (GTWHI)', logoUrl: 'https://gtwhi.com.my/wp-content/uploads/2024/09/GTWHI_TM.png' },
+          { name: 'Jabatan Perancangan Bandar dan Desa Semenanjung Malaysia (JPBD SM)', logoUrl: 'https://vectorise.net/logo/wp-content/uploads/2010/08/jabatan-Perancang-bandar-desa1.png' },
+          { name: 'Jabatan Perancangan Bandar dan Desa Pulau Pinang (JPBD Pulau Pinang)', logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbO72kvqQm_ATelihNDiRj8ixiswsDNk-lNA&s' },
+          { name: 'Lembaga Lebuhraya Malaysia (LLM)', logoUrl: 'https://www.kkr.gov.my/sites/default/files/inline-images/LLM_0.jpeg' },
+          { name: 'Jabatan Ukur dan Pemetaan (JUPEM)', logoUrl: 'https://www.jupem.gov.my/main/img/logo-default/logo_JUPEM.svg' },
+          { name: 'Perbadanan Labuan', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Seal_of_Labuan.svg/375px-Seal_of_Labuan.svg.png' },
+          { name: 'Pusat Geospatial Negara (PGN)', logoUrl: 'https://www.mygeoportal.gov.my/sites/default/files/Logo-2.png' },
+          { name: 'Institut Penyelidikan Perhutanan Malaysia (FRIM)', logoUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d8/FRIM_logo.svg/375px-FRIM_logo.svg.png' },
+          { name: 'Pejabat Ketua Pendaftar Mahkamah Persekutuan Malaysia Jabatan Perdana Menteri', logoUrl: 'https://www.kehakiman.gov.my/sites/default/files/gallery/main%20logo.png' },
+          { name: 'Bahagian Hal Ehwal Malaysia (BHEUU) Jabatan Perdana Menteri', logoUrl: 'https://www.bheuu.gov.my/_nuxt/img/jatanegara.8ccbbbd.png' },
+          { name: 'Jabatan Audit Negara', logoUrl: 'https://vectorise.net/vectorworks/logos/Jabatan%20Kerajaan/downloads/Logo%20Jabatan%20Audit%20Negara%20Malaysia.png' },
+          { name: 'Jabatan Pengairan dan Saliran Malaysia (JPS)', logoUrl: 'https://vectorise.net/vectorworks/logos/Jabatan%20Kerajaan/downloads/Logo%20Jab%20Pengairan%20Saliran%20M%27sia.png' },
+          { name: 'Suruhanjaya Koperasi Malaysia (SKM)', logoUrl: 'https://www.skm.gov.my/images/01-utama/footer_logo.png' },
+          { name: 'Arkib Negara Malaysia', logoUrl: 'https://www.arkib.gov.my/images/2023/10/18/logo-arkib-negara-malaysia-anm.png' },
+          { name: 'Perbadanan Tabung Pembangunan Kemahiran (PTPK)', logoUrl: 'https://spas.ptpk.gov.my/myserv_picture_ptpk/apps/intrologo_PTPK.png' },
+          { name: 'Kolej Komuniti Teluk Intan', logoUrl: 'https://www.mypolycc.edu.my/images/jdownloads/screenshots/thumbnails/TELUK%20INTAN-outlines.png' },
+          { name: 'Akademi Seni Budaya dan Warisan Kebangsaan (ASWARA)', logoUrl: 'https://www.aswara.edu.my/img/logo/only-aswara-logo.png' },
+          { name: 'Lembaga Pembangunan Seni Visual Negara (LPSVN)', logoUrl: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjMOfP8yZhAXA9EJhxkYtBZkCcTUZdU_YXXaLeRmsmCARwYoCcTtSVz5uTVphaUmaq158d-51uOyr0hxE3goGyFHM-xM5C_-AsxgAPJC2dSNFVzPo-L-h-A-hdSrU1RRlNW-ijrF7UmO0A/s1600/bsnegara.png' },
+          { name: 'Koperasi Telekom Malaysia Berhad (KOTA MAS)', logoUrl: 'https://kotamas.com.my/wp-content/uploads/2021/04/logo.png' },
+          { name: 'Pejabat Pilihan Raya Negeri Selangor', logoUrl: 'https://mysprsemak.spr.gov.my/img/Semakan/spr.png' },
+          { name: 'Majlis Bandaraya Subang Jaya', logoUrl: 'https://images.seeklogo.com/logo-png/48/1/majlis-bandaraya-subang-jaya-logo-png_seeklogo-489055.png' },
+          { name: 'Jabatan Warisan Negara', logoUrl: 'https://kraftangan.gov.my/images/agensi/warisan.png' },
+          { name: 'Universiti Selangor (UNISEL)', logoUrl: 'https://unisel.edu.my/wp-content/uploads/2024/06/logo_unisel_140k.png' },
+          { name: 'Universiti Teknologi MARA (UiTM)', logoUrl: 'https://ufuture.uitm.edu.my/home/img/logo/uitm.png' },
+          { name: 'Universiti Putra Malaysia (UPM)', logoUrl: 'https://upm.edu.my/assets/images23/cropped-20170406143426UPM-New_FINAL-300x120.jpg' },
+          { name: 'Universiti Teknologi Malaysia (UTM)', logoUrl: 'https://www.utm.my/wp-content/uploads/2022/10/LOGO-UTM.png' },
+          { name: 'Universiti Tun Hussein Onn Malaysia (UTHM)', logoUrl: 'https://www.uthm.edu.my/en/downloads/uthm-official-logo/26-logo-rasmi-uthm/file' },
+          { name: 'Kolej Kesihatan Bersekutu Sungai Buloh (KSKB)', logoUrl: 'https://i.servimg.com/u/f68/15/28/52/32/logos110.jpg' },
+          { name: 'Univsersiti Islam Selangor (UIS)', logoUrl: 'https://www.uis.edu.my/images/logo-uis-2025-100h.png' },
+          { name: 'Kolej Vokasional (KPM)', logoUrl: 'https://bpltv.moe.gov.my/wp-content/uploads/2021/08/image.png' },
+        ],
+      };
+
+
+      // === New Components for this Page ===
+
+      const TabButton = ({ children, isActive, onClick }) => (
+        <button
+          onClick={onClick}
+          className={`px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 transform hover:scale-105
+            ${isActive
+              ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/30'
+              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            }`}
+        >
+          {children}
+        </button>
+      );
+
+      const PartnerCard = ({ partner }) => (
+        <div className="bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center text-center h-48 transform hover:-translate-y-2 transition-all duration-300 hover:border-amber-500 hover:shadow-xl hover:shadow-amber-500/10 group">
+          {partner.logoUrl ? (
+            <>
+              <div className="flex-grow w-full h-24 flex items-center justify-center mb-3">
+                <div className="w-full h-full bg-white/95 rounded-md flex items-center justify-center p-2">
+                    <img 
+                        src={partner.logoUrl} 
+                        alt={partner.name} 
+                        className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-110" 
+                    />
+                </div>
+              </div>
+              <p className="text-gray-300 text-sm font-medium h-12 flex items-center justify-center">{partner.name}</p>
+            </>
+          ) : (
+            <h3 className="text-gray-200 text-lg font-bold text-center tracking-wide p-4">{partner.name}</h3>
+          )}
+        </div>
+      );
+      
+      const ClientCard = ({ client }) => (
+        <div className="bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-3 flex flex-col items-center justify-center text-center h-40 transform hover:-translate-y-1 transition-all duration-300 hover:border-amber-500/50 group">
+            {client.logoUrl ? (
+                <>
+                    <div className="flex-grow w-full h-20 flex items-center justify-center mb-2">
+                        <div className="w-full h-full bg-white/95 rounded-md flex items-center justify-center p-2">
+                            <img 
+                            src={client.logoUrl} 
+                            alt={client.name} 
+                            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-110" 
+                            />
+                        </div>
+                    </div>
+                    <p className="text-gray-400 text-xs h-12 flex items-center justify-center">{client.name}</p>
+                </>
+                ) : (
+                <div className="w-full h-full flex items-center justify-center p-3">
+                  <p className="text-gray-300 text-xs text-center">{client.name}</p>
+                </div>
+            )}
+        </div>
+      );
+
+
+      // === Main Page Component ===
+      const PartnerClientPage = () => {
+        const [activeTab, setActiveTab] = useState('technology');
+
+        return (
+          <div className="bg-gray-900 text-white overflow-x-hidden">
+            <Header isVisible={true} />
+            <main className="relative">
+              
+              <section className="relative py-20 md:py-32 overflow-hidden">
+                <Parallax speed={0.3} className="absolute inset-0 z-0">
+                  <video autoPlay loop muted playsInline src="video/bghp.mp4" className="w-full h-full object-cover opacity-90 scale-125">
+                    Your browser does not support the video tag.
+                  </video>
+                </Parallax>
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                <div className="relative container mx-auto px-6 text-center z-10">
+                  <AnimatedSection>
+                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">Partners & Clients</span>
+                    </h1>
+                    <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                      Building strong relationships and delivering excellence to a diverse range of organizations.
+                    </p>
+                  </AnimatedSection>
+                </div>
+              </section>
+
+              <div className="relative bg-gray-900">
+                <div className="container mx-auto px-6 py-20 space-y-24">
+                  
+                  {/* Business Partners Section */}
+                  <section>
+                    <AnimatedSection>
+                      <div className="text-center">
+                       <SectionTitle>Our Valued Business Partners</SectionTitle>
+                        <p className="text-gray-300 max-w-3xl mx-auto mt-8 mb-16">
+                            We collaborate with industry leaders to deliver cutting-edge solutions and drive technological advancement.
+                        </p>
+                        <div className="flex justify-center items-center flex-wrap gap-2 md:gap-4 mb-12">
+                          <TabButton isActive={activeTab === 'technology'} onClick={() => setActiveTab('technology')}>Technology</TabButton>
+                          <TabButton isActive={activeTab === 'strategic'} onClick={() => setActiveTab('strategic')}>Strategic & Integration</TabButton>
+                          <TabButton isActive={activeTab === 'security'} onClick={() => setActiveTab('security')}>Security</TabButton>
+                        </div>
+                      </div>
+                    </AnimatedSection>
+
+                    <div key={activeTab} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                       {partnersData[activeTab].map((partner, index) => (
+                          <AnimatedSection key={partner.name} delay={index * 80}>
+                            <PartnerCard partner={partner} />
+                          </AnimatedSection>
+                        ))}
+                    </div>
+                  </section>
+                  
+                  {/* Clients Section */}
+                  <section>
+                     <AnimatedSection>
+                        <div className="text-center">
+                            <SectionTitle>Who We've Worked With</SectionTitle>
+                            <p className="text-gray-300 max-w-3xl mx-auto mt-8 mb-16">
+                                We are proud to have served a wide array of clients, from government bodies to leading educational institutions, helping them achieve their strategic goals.
+                            </p>
+                        </div>
+                    </AnimatedSection>
+                    
+                    {/* Government Clients */}
+                    <div>
+                        <AnimatedSection delay={200}>
+                            <h3 className="text-2xl font-semibold text-white mb-8 text-center">Our Clients</h3>
+                        </AnimatedSection>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {clientsData.government.map((client, index) => (
+                                <AnimatedSection key={client.name} delay={index * 30}>
+                                    <ClientCard client={client} />
+                                </AnimatedSection>
+                            ))}
+                        </div>
+                    </div>
+                    
+                  </section>
+                </div>
+              </div>
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      // === Render the App ===
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Could not find root element to mount to");
+      }
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <PartnerClientPage />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
